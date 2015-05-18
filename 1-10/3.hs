@@ -2,7 +2,7 @@
 --
 -- What is the largest prime factor of the number 600851475143
 
-import Sequence (primes)
+import Euler.Sequence (primes)
 
 factors :: Integer -> [Integer]
 factors n

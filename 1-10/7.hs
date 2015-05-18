@@ -2,6 +2,6 @@
 --
 -- What is the 10,001st prime number?
 
-import Sequence (primes)
+import Euler.Sequence (primes)
 
 main = print $ primes !! 10000

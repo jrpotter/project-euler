@@ -5,6 +5,6 @@
 --
 -- By considering the terms in the Fibonacci sequence whose values do not exceed
 -- four million, find the sum of the even-valued terms.
-import Sequence (fibonacci)
+import Euler.Sequence (fibonacci)
 
 main = print . sum . takeWhile (<4000000) $ filter even (drop 2 fibonacci)
