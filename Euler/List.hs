@@ -26,7 +26,7 @@ subconsec n a@(x:xs) = let t = take' n [] a in
 -- if the list is empty). A wrapper function for use elsewhere (e.g. diagl)
 
 inits :: [[a]] -> [[a]]
-inits = filter (not .null) . map init
+inits = filter (not . null) . map init
 
 
 -- Takes diagonals from NW to SE direction, and returns a list of lists corresponding
