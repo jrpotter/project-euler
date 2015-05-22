@@ -1,5 +1,6 @@
 module Euler.List
 ( subconsec
+, takeSeq
 , diagl
 , diagr
 ) where
@@ -22,11 +23,14 @@ subconsec n a@(x:xs) = let t = take' n [] a in
           take' n r (x:xs) = take' (n-1) (r ++ [x]) xs
 
 
--- Goes through a list of lists, returning the init of each list (or nothing at all
--- if the list is empty). A wrapper function for use elsewhere (e.g. diagl)
+-- Takes in a list and breaks it up into sublists of length 1, 2, ... until no
+-- more elements remain in the list. The final list may have any number of elements
+-- up until the number of lists prior plus 1.
 
-inits :: [[a]] -> [[a]]
-inits = filter (not . null) . map init
+takeSeq :: Integer -> [a] -> [[a]]
+takeSeq _ [] = []
+takeSeq n xs = front : takeSeq (n+1) back
+    where (front, back) = splitAt (fromIntegral n) xs
 
 
 -- Takes diagonals from NW to SE direction, and returns a list of lists corresponding
@@ -39,7 +43,7 @@ diagl (x:xs) = diagl' [] (x:xs)
     where diagl' [] []     = []
           diagl' li []     = (map last li) : diagl' (inits li) []
           diagl' [] (y:ys) = [(last y)] : diagl' [(init y)] ys
-          diagl' li (y:ys) = let li' = li ++ [y] in (map last li') : diagl' (inits li') ys  
+          inits = filter (not . null) . map init
 
 
 -- Takes diagonals from NE to SW direction, and returns a list of lists corresponding
@@ -48,3 +52,4 @@ diagl (x:xs) = diagl' [] (x:xs)
 
 diagr :: [[a]] -> [[a]]
 diagr = diagl . map reverse
+

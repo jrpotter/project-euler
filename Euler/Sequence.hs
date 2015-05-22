@@ -1,5 +1,6 @@
 module Euler.Sequence 
 ( fibonacci
+, collatz
 , primes
 ) where
 
@@ -11,6 +12,15 @@ import qualified Data.PQueue.Prio.Min as PQ
 fibonacci :: [Integer]
 fibonacci = 0 : 1 : (fib 0 1)
     where fib x y = x + y : fib y (x + y)
+
+
+-- Collatz Sequence
+-- Takes a starting value, and returns all intermediate elements
+-- between the starting value and 1
+
+collatz :: Integer -> [Integer]
+collatz 1 = [1]
+collatz n = n : if even n then collatz (n `div` 2) else collatz (3 * n + 1)
 
 
 -- Primes (The Sieve of Eratosthenes)
