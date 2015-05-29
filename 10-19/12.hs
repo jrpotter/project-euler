@@ -20,11 +20,8 @@ import Data.List (group)
 import Euler.Algebra (factorize)
 
 -- Rather than going through the number of possible divisors, we instead compute
--- the number based on the factorization of a number. The power of some prime p, lets
--- call it n, represents n possible divisors of a number (p, p*p, p*p*p, ...). Thus if
--- we consider r_1, r_2, ..., r_n powers of primes p_1, p_2, ..., p_n, and also include
--- the possibility of the 0th power of p_i for some 1 <= i <= n, the number of divisors
--- is simply (r_1 + 1) * (r_2 + 1) * ... * (r_n + 1).
+-- the number based on the factorization of a number. This works similarly to how
+-- the divisors function works in Euler.Algebra.
 
 main = print . head $ filter (\x -> (divisors x) > 500) (triangle 0 1)
     where triangle a b = let c = a + b in c : triangle c (b + 1)

@@ -3,6 +3,7 @@ module Euler.List
 , takeSeq
 , diagl
 , diagr
+, remove
 ) where
 
 -- Takes in a list and returns all sublists of consecutive elements of length n
@@ -53,3 +54,10 @@ diagl (x:xs) = diagl' [] (x:xs)
 diagr :: [[a]] -> [[a]]
 diagr = diagl . map reverse
 
+
+-- Removes the index of the list at the passed argument.
+
+remove :: [a] -> Integer -> (Maybe a, [a])
+remove xs n = case splitAt (fromIntegral n) xs of
+    (f, [])     -> (Nothing, f)
+    (f, (s:ss)) -> (Just s, f ++ ss)

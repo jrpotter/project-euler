@@ -21,6 +21,19 @@ factorize n
               where f = head [x | x <- primes, n `mod` x == 0]
 
 
+-- Returns the divisors of a given number, based on its factorization.
+--
+-- The power of some prime p, lets call it n, represents n possible divisors of a number 
+-- (p, p*p, p*p*p, ...). Thus if we consider r_1, r_2, ..., r_n powers of primes p_1, p_2, 
+-- ..., p_n, and also include the possibility of the 0th power of p_i for some 1 <= i <= n, 
+-- the number of divisors is simply (r_1 + 1) * (r_2 + 1) * ... * (r_n + 1). We can 
+-- generate the divisors similarly.
+
+divisors :: Integer -> [Integer]
+divisors n = divisors' (factorize n)
+    where divisors' 
+
+
 -- Basic Factorial
 -- This differs from falling factorial which will decrease by
 -- a certain amount.
