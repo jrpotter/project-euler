@@ -16,7 +16,7 @@ module Euler.List
 
 subconsec :: Integer -> [a] -> [[a]]
 subconsec _ [] = []
-subconsec n a@(x:xs) = let t = take' n [] a in 
+subconsec n a@(x:xs) = let t = take' n [] a in
     case t of [] -> []
               _  -> t : subconsec n xs
     where take' 0 r _ = r
@@ -55,9 +55,10 @@ diagr :: [[a]] -> [[a]]
 diagr = diagl . map reverse
 
 
--- Removes the index of the list at the passed argument.
+-- Removes the element at the given index from the list.
 
-remove :: [a] -> Integer -> (Maybe a, [a])
-remove xs n = case splitAt (fromIntegral n) xs of
+remove :: Integer -> [a] -> (Maybe a, [a])
+remove n xs = case splitAt (fromIntegral n) xs of
     (f, [])     -> (Nothing, f)
     (f, (s:ss)) -> (Just s, f ++ ss)
+

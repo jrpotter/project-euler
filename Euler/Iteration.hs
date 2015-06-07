@@ -1,12 +1,7 @@
-module Iteration
-( permutations
-, combinations
+module Euler.Iteration
+( combinations
 ) where
 
-import Euler.List (remove)
-
--- Returns all possible permutations of a list.
-
-permuations :: [a] -> [[a]]
-permutations [] = []
-permutations (x:xs) = [[x]]
+combinations :: [a] -> [[a]]
+combinations [] = [[]]
+combinations (x:xs) = [] ++ let ys = combinations xs in map (x:) ys ++ ys
