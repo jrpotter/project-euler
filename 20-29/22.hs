@@ -7,4 +7,14 @@
 --
 -- What is the total of all the name scores in the file?
 
+import Data.Char (ord)
+import Data.List (sort)
+import Data.List.Split (splitOn)
 
+nameVal :: Int -> String -> Int
+nameVal n name =  n * (sum $ map (\x -> ord x - 64) name)
+
+main = do
+    contents <- readFile "names.txt"
+    let names = sort $ map (init . tail) (splitOn "," contents)
+    print . sum $ map (\(x, y) -> nameVal x y) (zip [1..] names)
