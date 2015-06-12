@@ -10,15 +10,10 @@
 --
 -- Find the sum of all the positive integers which cannot be written as the sum of two abundant numbers.
 
-import Euler.Algebra (divisors)
+import Data.Set as S
+import Data.List (sort)
+import Euler.Algebra (sumOfDivisors)
 
--- Keep a priority queue of abundant numbers
--- Sum up all values until next one; if a number is abundant, add mapped values into queue
-
--- Why is every multiple of 6 an abundant number?
--- Why are multiples of abundant numbers abundant?
-
-isAbundant :: Integer -> Bool
-isAbundant n = (sum . init . divisors) n > n
-
-main = print . length $ filter (isAbundant) [1..28123]
+main = print $ S.fold (+) 0 (S.difference (S.fromList [1..28123]) (S.fromList $ abundants >>= clean abundants))
+    where clean xs x = Prelude.map (+x) (Prelude.filter (\y -> y + x < 28124) xs)
+          abundants = Prelude.filter (\x -> sumOfDivisors x - x > x) [1..28123]

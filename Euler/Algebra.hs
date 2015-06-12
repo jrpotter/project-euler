@@ -1,6 +1,7 @@
 module Euler.Algebra
 ( factorize
 , divisors
+, sumOfDivisors
 , factorial
 , factorial'
 ) where
@@ -39,6 +40,16 @@ divisors n
     |otherwise = sort $ L.foldl1 multiply (pprods n)
     where multiply x y = x >>= \z -> map (z*) y
           pprods = map (scanl (*) 1) . L.group . factorize
+
+
+-- We note that every divisor of a number is represented as some subset
+-- of the factors of the original number. In fact, they are all possible
+-- combinations of these factors, and can be computed as such
+
+sumOfDivisors :: Integer -> Integer
+sumOfDivisors n = product $ map sum' (L.group $ factorize n)
+    where sum' [] = 1
+          sum' (x:xs) = 1 + x * (sum' xs)
 
 
 -- Basic Factorial
