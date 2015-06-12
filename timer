@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# We provide this as a separate script so
+# executing via the find method in Makefile
+# respects formatting
+
+echo "Running $1:"
+time $1
+echo

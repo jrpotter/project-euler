@@ -12,6 +12,10 @@ all: $(OBJ_FILES)
 %.o : %.hs
 	$(CC) -outputdir=$(dir $<)$(TMP) -I$(LIB) $<
 
+.PHONY: run
+run:
+	$(foreach var, $(HS_DIRS), find $(var) \! -name "*.*" -type f -exec ./timer {} \;;)
+
 .PHONY: clean
 clean: clean_tmp
 	$(foreach var, $(HS_DIRS), find $(var) \! -name "*.*" -type f -exec rm {} \;;)
