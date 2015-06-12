@@ -12,5 +12,13 @@
 
 import Euler.Algebra (divisors)
 
+-- Keep a priority queue of abundant numbers
+-- Sum up all values until next one; if a number is abundant, add mapped values into queue
+
+-- Why is every multiple of 6 an abundant number?
+-- Why are multiples of abundant numbers abundant?
+
 isAbundant :: Integer -> Bool
 isAbundant n = (sum . init . divisors) n > n
+
+main = print . length $ filter (isAbundant) [1..28123]
