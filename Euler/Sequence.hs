@@ -1,4 +1,4 @@
-module Euler.Sequence 
+module Euler.Sequence
 ( fibonacci
 , collatz
 , primes
