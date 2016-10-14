@@ -34,10 +34,10 @@ factorize n
 
 divisors :: Integer -> [Integer]
 divisors n
-    | n < 0    = (-1) : (divisors . abs) n
-    | n == 0   = [0]
-    | n == 1   = [1]
-    |otherwise = sort $ L.foldl1 multiply (pprods n)
+    | n < 0     = (-1) : (divisors . abs) n
+    | n == 0    = [0]
+    | n == 1    = [1]
+    | otherwise = sort $ L.foldl1 multiply (pprods n)
     where multiply x y = x >>= \z -> map (z*) y
           pprods = map (scanl (*) 1) . L.group . factorize
 

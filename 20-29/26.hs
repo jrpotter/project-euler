@@ -13,22 +13,37 @@
 --
 -- Find the value of d < 1000 for which 1/d contains the longest recurring cycle in its decimal fraction part.
 
-import Data.List (elemIndex)
+import Control.Applicative
+import qualified Data.Map.Strict as M
 
-digits :: Integer -> [Integer]
-digits t = digits' (ceiling $ log (fromIntegral t) / log 10)
-    where digits' c = (10^c `div` t) `mod` 10 : digits' (c+1)
+-- Returns all the divisors that form when performing long division
+decimals :: Integer -> [Integer]
+decimals 0 = undefined
+decimals 1 = []
+decimals x = decimals' 1 x
+    where propagate n d = decimals' (10 * n) d
+          decimals' n d
+            | n == 0    = []
+            | n < d     = propagate n d
+            | otherwise = n : propagate (n `mod` d) d
 
-count :: [Integer] -> [Integer] -> Int -> Int
-count (x:xs) ys z
-  | x `elem` ys = case elemIndex x ys of
-                    Just i -> length ys - i
-                    _      -> 0
-  | otherwise = count xs (ys ++ [x]) (z+1)
+-- Finds the indices of the first two elements that match
+findMatch :: [Integer] -> (Maybe Integer, Maybe Integer)
+findMatch [] = (Nothing, Nothing)
+findMatch [x] = (Nothing, Nothing)
+findMatch xs = findMatch' (M.empty) (zip xs [1..])
+    where findMatch' m [] = (Nothing, Nothing)
+          findMatch' m ((a, b):xs)
+            | M.member a m = (Just b, M.lookup a m)
+            | otherwise = findMatch' (M.insert a b m) xs
 
-main = mapM_ print (map (\x -> take 30 $ digits x) [2..999]) --print $ foldl (\x y -> max' x y) (1, 1) [2..9999]
-    where count' n = count (digits n) [] 0
-          max' a@(n, c) i
-              | count' i > c = (i, count' i)
-              | otherwise   = a
+-- Returns the size of the repeating cycle present in the decimal expansion
+difference :: Integer -> Maybe Integer
+difference n = let (a, b) = findMatch $ decimals n
+                in (-) <$> a <*> b
 
+-- First index is number, second number is length of cycle
+main = print $ foldl1 accum (zip indices diffs)
+    where accum x y = if snd y > snd x then y else x
+          indices = map Just [1..]
+          diffs = map difference [1..1000]

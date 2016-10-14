@@ -61,4 +61,3 @@ remove :: Integer -> [a] -> (Maybe a, [a])
 remove n xs = case splitAt (fromIntegral n) xs of
     (f, [])     -> (Nothing, f)
     (f, (s:ss)) -> (Just s, f ++ ss)
-
