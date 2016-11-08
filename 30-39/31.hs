@@ -8,3 +8,8 @@
 -- 1 x 1P + 1 x 50p + 2 x 20p + 1 x 5p + 1 x 2p + 3 x 1p.
 --
 -- How many different ways can 2P be made using any number of coins?
+
+import qualified Data.Strict.Map as M
+
+coins :: [Int]
+coins = [1, 2, 5, 10, 20, 50, 100, 200]
