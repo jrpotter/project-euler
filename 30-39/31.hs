@@ -9,7 +9,13 @@
 --
 -- How many different ways can 2P be made using any number of coins?
 
-import qualified Data.Strict.Map as M
+count :: Int -> [Int] -> Int
+count 0 _ = 1
+count _ [] = 0
+count amount a@(x:xs)
+  | amount < 0 = 0
+  | otherwise = count (amount - x) a + count amount xs
 
-coins :: [Int]
-coins = [1, 2, 5, 10, 20, 50, 100, 200]
+main :: IO ()
+main = print $ count 200 [200, 100, 50, 20, 10, 5, 2, 1]
+
