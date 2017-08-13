@@ -12,12 +12,7 @@
 -- Find the product of the coefficients, a and b, for the quadratic expression that produces the maximum number of primes for consecutive values of n,
 -- starting with n = 0.
 
-import Euler.Sequence (primes)
-
-isPrime :: Integer -> Bool
-isPrime x = case takeWhile (<= x) primes of
-              [] -> False
-              xs -> x == (last xs)
+import Euler.Sequence (isPrime)
 
 quad :: (Integer, Integer) -> [Integer]
 quad c@(a, b) = takeWhile (isPrime) (quad' 0)

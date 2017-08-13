@@ -6,13 +6,11 @@ module Euler.Sequence
 
 import qualified Data.PQueue.Prio.Min as PQ
 
-
 -- Fibonacci Sequence (0, 1, 1, 2, 3, 5, 8, ...)
 
 fibonacci :: [Integer]
 fibonacci = 0 : 1 : (fib 0 1)
     where fib x y = x + y : fib y (x + y)
-
 
 -- Collatz Sequence
 -- Takes a starting value, and returns all intermediate elements
@@ -21,7 +19,6 @@ fibonacci = 0 : 1 : (fib 0 1)
 collatz :: Integer -> [Integer]
 collatz 1 = [1]
 collatz n = n : if even n then collatz (n `div` 2) else collatz (3 * n + 1)
-
 
 -- Primes (The Sieve of Eratosthenes)
 -- Described in https://www.cs.hmc.edu/~oneill/papers/Sieve-JFP.pdf
@@ -48,3 +45,4 @@ primes = 2 : 3 : 5 : 7 : sieve_E (spin wheel 11)
     where spin (x:xs) n = n : spin xs (n + x)
           wheel = 2:4:2:4:6:2:6:4:2:4:6:6:2:6:4:2:6:4:6:8:4:2:4:2:4:8:
                   6:4:6:2:4:6:2:6:6:4:2:4:6:2:6:4:2:4:2:10:2:10:wheel
+

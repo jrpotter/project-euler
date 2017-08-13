@@ -1,6 +1,8 @@
 module Euler.Algebra
-( factorize
+( simplify
+, factorize
 , primePowers
+, isPrime
 , divisors
 , sumOfDivisors
 , factorial
@@ -15,20 +17,33 @@ import Control.Applicative ((<*>))
 -- numbers return all factors and their negative counterparts
 factorize :: Integer -> [Integer]
 factorize n
-    | n < 0     = [id, negate] <*> factorize (abs n)
-    | n <= 1    = [n]
-    | otherwise = factorize' n
-    where factorize' n
-              | n == 1    = []
-              | otherwise = f : factorize' (n `div` f)
-              where f = head [x | x <- S.primes, n `mod` x == 0]
+  | n < 0     = [id, negate] <*> factorize (abs n)
+  | n <= 1    = [n]
+  | otherwise = factorize' n
+  where factorize' n
+          | n == 1    = []
+          | otherwise = f : factorize' (n `div` f)
+          where f = head [x | x <- S.primes, n `mod` x == 0]
+
+-- Takes in a numerator and denominator, and returns them in simplified form.
+simplify :: Integer -> Integer -> (Integer, Integer)
+simplify a b = let num = product ((L.\\) (factorize a) (factorize b))
+                   den = product ((L.\\) (factorize b) (factorize a))
+               in (num, den)
 
 -- Returns the prime numbers and their respective powers that make up a
 -- given number.
 primePowers :: Integer -> [(Integer, Integer)]
 primePowers = process . L.group . L.sort . factorize
-    where process [] = []
-          process (x:xs) = (head x, fromIntegral . length $ x) : process xs
+  where process [] = []
+        process (x:xs) = (head x, fromIntegral . length $ x) : process xs
+
+-- Checks if the given integer is a prime or not.
+isPrime :: Integer -> Bool
+isPrime x = isPrime' x primes
+  where isPrime' x (p:ps)
+          | p < x = isPrime' x ps
+          | otherwise = x == p
 
 -- Returns the divisors of a given number, based on its factorization.
 --
@@ -40,33 +55,32 @@ primePowers = process . L.group . L.sort . factorize
 -- similarly.
 divisors :: Integer -> [Integer]
 divisors n
-    | n < 0     = (-1) : (divisors . abs) n
-    | n == 0    = [0]
-    | n == 1    = [1]
-    | otherwise = sort $ L.foldl1 multiply (pprods n)
-    where multiply x y = x >>= \z -> map (z*) y
-          pprods = map (scanl (*) 1) . L.group . factorize
-
+  | n < 0     = (-1) : (divisors . abs) n
+  | n == 0    = [0]
+  | n == 1    = [1]
+  | otherwise = sort $ L.foldl1 multiply (pprods n)
+  where multiply x y = x >>= \z -> map (z*) y
+        pprods = map (scanl (*) 1) . L.group . factorize
 
 -- We note that every divisor of a number is represented as some subset
 -- of the factors of the original number. In fact, they are all possible
 -- combinations of these factors, and can be computed as such
 sumOfDivisors :: Integer -> Integer
 sumOfDivisors n = product $ map sum' (L.group $ factorize n)
-    where sum' [] = 1
-          sum' (x:xs) = 1 + x * (sum' xs)
-
+  where sum' [] = 1
+        sum' (x:xs) = 1 + x * (sum' xs)
 
 -- Basic Factorial
 -- This differs from falling factorial which will decrease by a certain amount.
 factorial :: Integer -> Integer
+factorial 0 = 1
 factorial 1 = 1
 factorial n = n * factorial (n-1)
-
 
 -- Falling Factorial
 -- Pursues the factorial procedure but stops after a given number of steps.
 factorial' :: Integer -> Integer -> Integer
+factorial' 0 _ = 1
 factorial' 1 _ = 1
 factorial' _ 0 = 1
 factorial' n m = n * factorial' (n-1) (m-1)
